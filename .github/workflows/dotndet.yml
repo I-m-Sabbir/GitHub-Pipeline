@@ -1,45 +1,38 @@
 name: .NET CI
-
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
-
-    - name: Restore
-      run: dotnet restore ./Src/SimpleDemo.sln
-
-    - name: Build
-      run: dotnet build ./Src/SimpleDemo.sln --configuration Release --no-restore
-
-    - name: Test
-      run: dotnet test ./Src/SimpleDemo.sln --configuration Release --no-restore --verbosity normal
-      
-    # 🔐 Login to Docker Hub
-    - name: Login to Docker Hub
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore ./Src/SimpleDemo.sln
+      - name: Build
+        run: dotnet build ./Src/SimpleDemo.sln --configuration Release --no-restore
+      - name: Test
+        run: >-
+          dotnet test ./Src/SimpleDemo.sln --configuration Release --no-restore
+          --verbosity normal
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    # 🐳 Build & Push
-    - name: Build and push Docker image
+          username: '${{ secrets.DOCKERHUB_USERNAME }}'
+          password: '${{ secrets.DOCKERHUB_TOKEN }}'
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-            context: .
-            file: ./Src/WebApi/Dockerfile
-            push: true
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/webapi:latest
+          context: .
+          file: ./Src/WebApi/Dockerfile
+          push: true
+          tags: '${{ secrets.DOCKERHUB_USERNAME }}/webapi:latest'
