@@ -19,11 +19,11 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./Src/SimpleDemo.sln
 
     - name: Build
-      run: dotnet build ./Src/SimpleDemo.sln --no-restore --configuration Release
+      run: dotnet build ./Src/SimpleDemo.sln --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test ./Src/SimpleDemo.sln --no-build --verbosity normal
+      run: dotnet test ./Src/SimpleDemo.sln --configuration Release --no-restore --verbosity normal
