@@ -14,6 +14,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_ENVIRONMENT=Production
+
 COPY --from=build /publish .
 
 ENTRYPOINT ["dotnet", "WebApi.dll"]
