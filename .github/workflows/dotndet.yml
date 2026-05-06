@@ -29,10 +29,17 @@ jobs:
         with:
           username: '${{ secrets.DOCKERHUB_USERNAME }}'
           password: '${{ secrets.DOCKERHUB_TOKEN }}'
-      - name: Build and push Docker image
+      - name: Build and push WebApi Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Src/WebApi/Dockerfile
           push: true
           tags: '${{ secrets.DOCKERHUB_USERNAME }}/webapi:latest'
+      - name: Build and push BlazorApp Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Src/BlazorApp/Dockerfile
+          push: true
+          tags: '${{ secrets.DOCKERHUB_USERNAME }}/blazorapp:latest'
